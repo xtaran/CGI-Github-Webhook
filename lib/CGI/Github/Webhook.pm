@@ -1,10 +1,6 @@
 package CGI::Github::Webhook;
 
-=head1 NAME
-
-CGI::Github::Webhook - Easily create CGI-based GitHub webhooks
-
-=cut
+# ABSTRACT: Easily create CGI based GitHub webhooks
 
 use strict;
 use warnings;
