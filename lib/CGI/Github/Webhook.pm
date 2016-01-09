@@ -10,7 +10,7 @@ use 5.010;
 
 use Moo;
 use CGI;
-#use Data::Dumper;
+use Data::Dumper;
 use JSON;
 use Try::Tiny;
 use Digest::SHA qw(hmac_sha1_hex);
