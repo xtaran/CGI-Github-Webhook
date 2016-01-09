@@ -10,7 +10,7 @@ use strict;
 use warnings;
 use 5.010;
 
-our $VERSION = '0.01';
+# VERSION
 
 use Moo;
 use CGI;
@@ -66,7 +66,7 @@ The CGI.pm object internally used.
 
 has cgi => (
     is => 'ro',
-    default => CGI->new(),
+    default => sub { CGI->new() },
     );
 
 =head4 log
@@ -108,6 +108,7 @@ password.
 =cut
 
 has secret => (
+    is => 'ro',
     required => 1,
     );
 
@@ -120,6 +121,7 @@ triggered".
 =cut
 
 has text_on_success => (
+    is => 'rw',
     default => 'Successfully triggered',
     );
 
@@ -131,6 +133,7 @@ failed. Defaults to "Authentication failed".
 =cut
 
 has text_on_auth_fail => (
+    is => 'rw',
     default => 'Authentication failed',
     );
 
@@ -142,6 +145,7 @@ failed. Defaults to "Trigger failed".
 =cut
 
 has text_on_trigger_fail => (
+    is => 'rw',
     default => 'Trigger failed',
     );
 
@@ -195,9 +199,9 @@ sub run {
 
     print $q->header($self->mime_type);
 
-    open(LOG, '>>', $logfile);
-    say LOG "Date: ".localtime;
-    say LOG "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
+    open(my $logfh, '>>', $logfile);
+    say $logfh "Date: ".localtime;
+    say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
 
     my $payload = '';
     try {
@@ -212,25 +216,25 @@ sub run {
     my $calculated_signature = 'sha1='.
         hmac_sha1_hex(''.($q->param('POSTDATA') || '<no payload>'), $secret);
 
-    print LOG Dumper($payload, $x_hub_signature, $calculated_signature);
+    print $logfh Dumper($payload, $x_hub_signature, $calculated_signature);
 
     if ($x_hub_signature eq $calculated_signature) {
         say $self->text_on_success;
-        say LOG $self->text_on_success;
-        close LOG;
+        say $logfh $self->text_on_success;
+        close $logfh;
 
         my $rc = system($self->trigger.' >> '.$logfile.' 2>&1 '.
                         ($self->trigger_backgrounded ? '&' : ''));
         if ($rc == 0) {
             say $self->text_on_trigger_fail;
-            say LOG $self->text_on_trigger_fail;
+            say $logfh $self->text_on_trigger_fail;
             if ($? == -1) {
-                say LOG "Trigger failed to execute: $!";
+                say $logfh "Trigger failed to execute: $!";
             } elsif ($? & 127) {
-                printf LOG "child died with signal %d, %s coredump\n",
+                printf $logfh "child died with signal %d, %s coredump\n",
                 ($? & 127),  ($? & 128) ? 'with' : 'without';
             } else {
-                printf LOG "child exited with value %d\n", $? >> 8;
+                printf $logfh "child exited with value %d\n", $? >> 8;
             }
             return 0;
         } else {
@@ -238,9 +242,9 @@ sub run {
         }
     } else {
         say $self->text_on_auth_fail;
-        say LOG $self->text_on_auth_fail;
-        close LOG;
-        return undef;
+        say $logfh $self->text_on_auth_fail;
+        close $logfh;
+        return; # undef or empty list, i.e. false
     }
 }
 
