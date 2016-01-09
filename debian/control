@@ -1,0 +1,36 @@
+Source: libcgi-github-webhook-perl
+Section: perl
+Priority: optional
+Maintainer: Axel Beckert <abe@debian.org>
+Build-Depends: debhelper (>= 9),
+               dh-dist-zilla,
+               libdist-zilla-plugin-git-perl,
+               libdist-zilla-plugin-githubmeta-perl,
+               libdist-zilla-plugin-ourpkgversion-perl,
+               libdist-zilla-plugin-podweaver-perl,
+               libdist-zilla-plugin-test-perl-critic-perl,
+               libdist-zilla-plugin-test-kwalitee-perl
+Build-Depends-Indep: libcgi-pm-perl,
+                     libjson-perl,
+                     libmoo-perl,
+                     libtry-tiny-perl,
+                     perl
+Standards-Version: 3.9.6
+Vcs-Browser: https://github.com/xtaran/run-parts
+Vcs-Git: git://github.com/xtaran/run-parts.git
+Homepage: https://metacpan.org/release/Run-Parts
+Testsuite: autopkgtest-pkg-perl
+
+Package: libcgi-github-webhook-perl
+Architecture: all
+Depends: libcgi-pm-perl,
+         libjson-perl,
+         libmoo-perl,
+         libtry-tiny-perl,
+         ${misc:Depends},
+         ${perl:Depends}
+Description: Easily write CGI-based GitHub webhooks in Perl
+ CGI::Github::Webhook provides an easy way to write CGI-based GitHub
+ webhooks in Perl. In most cases three statements already
+ suffice. Configure a script to trigger, a shared secret and a log
+ file and you're ready to go.
