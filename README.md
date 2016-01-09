@@ -5,6 +5,9 @@ An easy to use module for writing CGI-based
 [Github webhook](https://developer.github.com/webhooks/) backends in
 Perl.
 
+In most cases three statements already suffice. Configure a script to
+trigger, a shared secret and a log file and you're ready to go.
+
 Synopsis
 --------
 
