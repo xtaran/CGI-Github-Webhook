@@ -30,21 +30,16 @@ GitHub webhooks.
         trigger_backgrounded => 1,
         secret => 'use a generated password here, nothing valuable',
         log => '/srv/some-github-project/log/trigger.log',
-        text_on_success => 'Successfully triggered',
-        text_on_auth_fail => 'Authentication failed',
-        text_on_trigger_fail => 'Trigger failed',
         ...
     );
     $ghwh->run();
 
-    ...
+=cut
 
-
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+#=head1 EXPORT
+#
+#A list of functions that can be exported.  You can delete this section
+#if you don't export anything, such as for a purely object-oriented module.
 
 =head1 CONSTRUCTOR
 
