@@ -33,7 +33,7 @@ GitHub webhooks.
         trigger => '/srv/some-github-project/bin/deploy.pl',
         trigger_backgrounded => 1,
         secret => 'use a generated password here, nothing valuable',
-        log => '/srv/some-github-project/bin/deploy.pl',
+        log => '/srv/some-github-project/log/trigger.log',
         text_on_success => 'Successfully triggered',
         text_on_auth_fail => 'Authentication failed',
         text_on_trigger_fail => 'Trigger failed',
