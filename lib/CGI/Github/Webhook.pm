@@ -184,47 +184,6 @@ has authenticated => (
 
 =head1 SUBROUTINES/METHODS
 
-=head2 verify_authentication
-
-Start the authentication verification return true if it could be
-verified and false else.
-
-=cut
-
-sub verify_authentication {
-    my $self = shift;
-
-    my $logfile = $self->log;
-    my $q       = $self->cgi;
-    my $secret  = $self->secret;
-
-    print $q->header($self->mime_type);
-
-    open(my $logfh, '>>', $logfile);
-    say $logfh "Date: ".localtime;
-    say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
-
-    my $payload = '';
-    if ($q->param('POSTDATA')) {
-        try {
-            $payload = decode_json(''.$q->param('POSTDATA'));
-        } catch {
-            $payload = $_;
-        };
-    }
-    $payload ||= '<no payload>';
-
-    my $x_hub_signature =
-        $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
-    my $calculated_signature = 'sha1='.
-        hmac_sha1_hex(''.($q->param('POSTDATA') || '<no payload>'), $secret);
-
-    print $logfh Dumper($payload, $x_hub_signature, $calculated_signature);
-    close $logfh;
-
-    return $x_hub_signature eq $calculated_signature;
-}
-
 =head2 run
 
 Start the authentication verification and run the trigger if the
@@ -273,6 +232,47 @@ sub run {
         close $logfh;
         return; # undef or empty list, i.e. false
     }
+}
+
+=head2 verify_authentication
+
+Start the authentication verification return true if it could be
+verified and false else.
+
+=cut
+
+sub verify_authentication {
+    my $self = shift;
+
+    my $logfile = $self->log;
+    my $q       = $self->cgi;
+    my $secret  = $self->secret;
+
+    print $q->header($self->mime_type);
+
+    open(my $logfh, '>>', $logfile);
+    say $logfh "Date: ".localtime;
+    say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
+
+    my $payload = '';
+    if ($q->param('POSTDATA')) {
+        try {
+            $payload = decode_json(''.$q->param('POSTDATA'));
+        } catch {
+            $payload = $_;
+        };
+    }
+    $payload ||= '<no payload>';
+
+    my $x_hub_signature =
+        $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
+    my $calculated_signature = 'sha1='.
+        hmac_sha1_hex(''.($q->param('POSTDATA') || '<no payload>'), $secret);
+
+    print $logfh Dumper($payload, $x_hub_signature, $calculated_signature);
+    close $logfh;
+
+    return $x_hub_signature eq $calculated_signature;
 }
 
 =head1 AUTHOR
