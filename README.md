@@ -1,6 +1,9 @@
 CGI::Github::Webhook
 ====================
 
+[![Build Status](https://travis-ci.org/xtaran/CGI-Github-Webhook.svg?branch=master)](https://travis-ci.org/xtaran/CGI-Github-Webhook)
+[![Coverage Status](https://coveralls.io/repos/xtaran/CGI-Github-Webhook/badge.svg?branch=master&service=github)](https://coveralls.io/github/xtaran/CGI-Github-Webhook?branch=master)
+
 An easy to use module for writing CGI-based
 [Github webhook](https://developer.github.com/webhooks/) backends in
 Perl.
