@@ -183,7 +183,6 @@ authentication error.
 sub run {
     my $self = shift;
 
-    #TODO my $basedir = '/srv/dpmb';
     my $logfile = $self->log;
     my $q       = $self->cgi;
     my $secret  = $self->secret;
