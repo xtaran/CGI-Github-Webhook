@@ -47,7 +47,7 @@ isnt(system("perl -I$dir/../lib $dir/cgi/basic.pl false $secret $tmplog 'POSTDAT
 is(read_text($tmpout),
    "Content-Type: text/plain; charset=utf-8\r\n\r\nTrigger failed\n",
    "CGI output as expected");
-my $log = read_text($tmplog);
+$log = read_text($tmplog);
 $log =~ s/^Date:.*/Date:/;
 is($log, "Date:
 Remote IP: localhost (127.0.0.1)
