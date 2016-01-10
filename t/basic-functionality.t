@@ -38,11 +38,27 @@ foo
 Successfully triggered
 ", "CGI log file as expected");
 
+# Reset the log file
+($fh1, $tmplog) = tempfile();
+
 isnt(system("perl -I$dir/../lib $dir/cgi/basic.pl false $secret $tmplog 'POSTDATA=$json'".
             "> $tmpout 2>&1"),
      0, 'system calling false as trigger exited with non-zero');
-
-# TODO
-system('head', $tmplog, $tmpout);
+is(read_text($tmpout),
+   "Content-Type: text/plain; charset=utf-8\r\n\r\nTrigger failed\n",
+   "CGI output as expected");
+my $log = read_text($tmplog);
+$log =~ s/^Date:.*/Date:/;
+is($log, "Date:
+Remote IP: localhost (127.0.0.1)
+\$VAR1 = {
+          'fnord' => 'gnarz'
+        };
+\$VAR2 = 'sha1=f0265993a0e0c508b277666562b3e36ed3d5695d';
+\$VAR3 = 'sha1=f0265993a0e0c508b277666562b3e36ed3d5695d';
+false >> $tmplog 2>&1 
+Trigger failed
+child exited with value 1
+", "CGI log file as expected");
 
 done_testing();

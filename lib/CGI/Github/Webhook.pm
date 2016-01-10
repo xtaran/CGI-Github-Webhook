@@ -215,7 +215,7 @@ sub run {
             ($self->trigger_backgrounded ? '&' : '');
         my $rc = system($trigger);
         if ($rc != 0) {
-            say $trigger;
+            say $logfh $trigger;
             say $self->text_on_trigger_fail;
             say $logfh $self->text_on_trigger_fail;
             if ($? == -1) {
