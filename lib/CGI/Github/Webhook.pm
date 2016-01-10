@@ -167,16 +167,31 @@ has trigger_backgrounded => (
     default => 1,
 );
 
+=head1 OTHER PROPERTIES
+
+=head4 authenticated
+
+Returns true if the authentication could be
+verified and false else. Read-only attribute.
+
+=cut
+
+has authenticated => (
+    is => 'ro',
+    builder => 'verify_authentication',
+    lazy => 1,
+    );
+
 =head1 SUBROUTINES/METHODS
 
-=head2 authenticated
+=head2 verify_authentication
 
 Start the authentication verification return true if it could be
 verified and false else.
 
 =cut
 
-sub authenticated {
+sub verify_authentication {
     my $self = shift;
 
     my $logfile = $self->log;

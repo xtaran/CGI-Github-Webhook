@@ -32,5 +32,7 @@ my $ghwh = CGI::Github::Webhook->new(
     );
 
 ok($ghwh->authenticated, 'Authentication successful');
+ok($ghwh->authenticated,
+   'Authentication still considered successful on a second retrieval');
 
 done_testing();
