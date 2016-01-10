@@ -202,6 +202,18 @@ sub header {
     }
 }
 
+=head2 send_header
+
+Passes arguments to $self->header and prints result to STDOUT.
+
+=cut
+
+sub send_header {
+    my $self = shift;
+
+    print $self->header(@_);
+}
+
 =head2 run
 
 Start the authentication verification and run the trigger if the
@@ -266,7 +278,7 @@ sub verify_authentication {
     my $q       = $self->cgi;
     my $secret  = $self->secret;
 
-    print $self->header();
+    $self->send_header();
 
     open(my $logfh, '>>', $logfile);
     say $logfh "Date: ".localtime;
