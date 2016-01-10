@@ -169,18 +169,14 @@ has trigger_backgrounded => (
 
 =head1 SUBROUTINES/METHODS
 
-=head2 run
+=head2 authenticated
 
-Start the authentication verification and run the trigger if the
-authentication succeeds.
-
-Returns true on success, false on error. More precisely it returns a
-defined false on error launching the trigger and undef on
-authentication error.
+Start the authentication verification return true if it could be
+verified and false else.
 
 =cut
 
-sub run {
+sub authenticated {
     my $self = shift;
 
     my $logfile = $self->log;
@@ -209,8 +205,29 @@ sub run {
         hmac_sha1_hex(''.($q->param('POSTDATA') || '<no payload>'), $secret);
 
     print $logfh Dumper($payload, $x_hub_signature, $calculated_signature);
+    close $logfh;
 
-    if ($x_hub_signature eq $calculated_signature) {
+    return $x_hub_signature eq $calculated_signature;
+}
+
+=head2 run
+
+Start the authentication verification and run the trigger if the
+authentication succeeds.
+
+Returns true on success, false on error. More precisely it returns a
+defined false on error launching the trigger and undef on
+authentication error.
+
+=cut
+
+sub run {
+    my $self = shift;
+
+    my $logfile = $self->log;
+    open(my $logfh, '>>', $logfile);
+
+    if ($self->authenticated) {
         my $trigger = $self->trigger.' >> '.$logfile.' 2>&1 '.
             ($self->trigger_backgrounded ? '&' : '');
         my $rc = system($trigger);
