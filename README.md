@@ -24,7 +24,7 @@ my $ghwh = CGI::Github::Webhook->new(
     trigger => '/srv/some-github-project/bin/deploy.pl',
     trigger_backgrounded => 1,
     secret => 'use a generated password here, nothing valuable',
-    log => '/srv/some-github-project/log/deployment.log,
+    log => '/srv/some-github-project/log/deployment.log',
 );
 $ghwh->run();
 ```
