@@ -196,7 +196,7 @@ sub run {
     my $payload = '';
     if ($q->param('POSTDATA')) {
         try {
-            $payload = decode_json($q->param('POSTDATA'));
+            $payload = decode_json(''.$q->param('POSTDATA'));
         } catch {
             $payload = $_;
         };
