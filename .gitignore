@@ -1,0 +1,4 @@
+*~
+/cover_db
+/.build
+/debian/*debhelper*
