@@ -182,6 +182,40 @@ has authenticated => (
     lazy => 1,
     );
 
+=head4 payload
+
+The payload as passed as payload in the POST request
+
+=cut
+
+has payload => (
+    is => 'lazy',
+    );
+
+=head4 payload_json
+
+The payload as passed as payload in the POST request if it is valid
+JSON, else an error message in JSON format.
+
+=cut
+
+has payload_json => (
+    is => 'lazy',
+    );
+
+=head4 payload_perl
+
+The payload as perl data structure (hashref) as decoded by
+decode_json. If the payload was no valid JSON, it returns a hashref
+containing either { payload => 'none' } if there was no payload, or {
+error => ... } in case of a decode_json error had been caught.
+
+=cut
+
+has payload_perl => (
+    is => 'lazy',
+    );
+
 =head1 SUBROUTINES/METHODS
 
 =head2 header
@@ -200,6 +234,59 @@ sub header {
     } else {
         return $self->cgi->header($self->mime_type);
     }
+}
+
+=head2 _build_payload_json
+
+Returns the requests payload in JSON format (i.e. as sent by GitHub).
+
+=cut
+
+sub _build_payload {
+    my $self = shift;
+    my $q    = $self->cgi;
+
+    if ($q->param('POSTDATA')) {
+        return ''.$q->param('POSTDATA');
+    } else {
+        return;
+    }
+}
+
+=head2 _build_payload_json
+
+Returns the requests payload in JSON format (i.e. as sent by GitHub).
+
+=cut
+
+sub _build_payload_json {
+    my $self = shift;
+    my $q    = $self->cgi;
+
+    my $payload = qq({"payload":"none"});
+    if ($self->payload) {
+        $payload = $self->payload;
+        try {
+            decode_json($payload);
+        } catch {
+            $payload = qq({"error":"$_"});
+        };
+    }
+
+    return $payload;
+}
+
+=head2 _build_payload_perl
+
+Returns the requests payload as perl data structure, i.e. parsed by
+decode_json().
+
+=cut
+
+sub _build_payload_perl {
+    my $self = shift;
+
+    return decode_json($self->payload_json);
 }
 
 =head2 send_header
@@ -284,22 +371,13 @@ sub verify_authentication {
     say $logfh "Date: ".localtime;
     say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
 
-    my $payload = '';
-    if ($q->param('POSTDATA')) {
-        try {
-            $payload = decode_json(''.$q->param('POSTDATA'));
-        } catch {
-            $payload = $_;
-        };
-    }
-    $payload ||= '<no payload>';
-
     my $x_hub_signature =
         $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
     my $calculated_signature = 'sha1='.
-        hmac_sha1_hex(''.($q->param('POSTDATA') || '<no payload>'), $secret);
+        hmac_sha1_hex($self->payload, $secret);
 
-    print $logfh Dumper($payload, $x_hub_signature, $calculated_signature);
+    print $logfh Dumper($self->payload_perl,
+                        $x_hub_signature, $calculated_signature);
     close $logfh;
 
     return $x_hub_signature eq $calculated_signature;
