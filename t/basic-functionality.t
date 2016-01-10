@@ -8,6 +8,7 @@ use Test::More;
 use File::Temp qw(tempfile);
 use Digest::SHA qw(hmac_sha1_hex);
 use File::Basename;
+use File::Slurper qw(read_text);
 
 my ($fh1, $tmplog) = tempfile();
 my ($fh2, $tmpout) = tempfile();
@@ -21,6 +22,21 @@ $ENV{HTTP_X_HUB_SIGNATURE} = $signature;
 is(system("perl -I$dir/../lib $dir/cgi/basic.pl 'echo foo' $secret $tmplog 'POSTDATA=$json'".
           "> $tmpout 2>&1"),
    0, 'system exited with zero');
+is(read_text($tmpout),
+   "Content-Type: text/plain; charset=utf-8\r\n\r\nSuccessfully triggered\n",
+   "CGI output as expected");
+my $log = read_text($tmplog);
+$log =~ s/^Date:.*/Date:/;
+is($log, "Date:
+Remote IP: localhost (127.0.0.1)
+\$VAR1 = {
+          'fnord' => 'gnarz'
+        };
+\$VAR2 = 'sha1=f0265993a0e0c508b277666562b3e36ed3d5695d';
+\$VAR3 = 'sha1=f0265993a0e0c508b277666562b3e36ed3d5695d';
+foo
+Successfully triggered
+", "CGI log file as expected");
 
 isnt(system("perl -I$dir/../lib $dir/cgi/basic.pl false $secret $tmplog 'POSTDATA=$json'".
             "> $tmpout 2>&1"),

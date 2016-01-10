@@ -11,6 +11,7 @@ Build-Depends: debhelper (>= 9),
                libdist-zilla-plugin-test-perl-critic-perl,
                libdist-zilla-plugin-test-kwalitee-perl
 Build-Depends-Indep: libcgi-pm-perl,
+                     libfile-slurper-perl,
                      libjson-perl,
                      libmoo-perl,
                      libtry-tiny-perl,
