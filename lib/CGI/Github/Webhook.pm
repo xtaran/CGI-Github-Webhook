@@ -192,6 +192,17 @@ has payload => (
     is => 'lazy',
     );
 
+sub _build_payload {
+    my $self = shift;
+    my $q    = $self->cgi;
+
+    if ($q->param('POSTDATA')) {
+        return ''.$q->param('POSTDATA');
+    } else {
+        return;
+    }
+}
+
 =head4 payload_json
 
 The payload as passed as payload in the POST request if it is valid
@@ -202,6 +213,23 @@ JSON, else an error message in JSON format.
 has payload_json => (
     is => 'lazy',
     );
+
+sub _build_payload_json {
+    my $self = shift;
+    my $q    = $self->cgi;
+
+    my $payload = qq({"payload":"none"});
+    if ($self->payload) {
+        $payload = $self->payload;
+        try {
+            decode_json($payload);
+        } catch {
+            $payload = qq({"error":"$_"});
+        };
+    }
+
+    return $payload;
+}
 
 =head4 payload_perl
 
@@ -215,6 +243,12 @@ error => ... } in case of a decode_json error had been caught.
 has payload_perl => (
     is => 'lazy',
     );
+
+sub _build_payload_perl {
+    my $self = shift;
+
+    return decode_json($self->payload_json);
+}
 
 =head1 SUBROUTINES/METHODS
 
@@ -234,59 +268,6 @@ sub header {
     } else {
         return $self->cgi->header($self->mime_type);
     }
-}
-
-=head2 _build_payload_json
-
-Returns the requests payload in JSON format (i.e. as sent by GitHub).
-
-=cut
-
-sub _build_payload {
-    my $self = shift;
-    my $q    = $self->cgi;
-
-    if ($q->param('POSTDATA')) {
-        return ''.$q->param('POSTDATA');
-    } else {
-        return;
-    }
-}
-
-=head2 _build_payload_json
-
-Returns the requests payload in JSON format (i.e. as sent by GitHub).
-
-=cut
-
-sub _build_payload_json {
-    my $self = shift;
-    my $q    = $self->cgi;
-
-    my $payload = qq({"payload":"none"});
-    if ($self->payload) {
-        $payload = $self->payload;
-        try {
-            decode_json($payload);
-        } catch {
-            $payload = qq({"error":"$_"});
-        };
-    }
-
-    return $payload;
-}
-
-=head2 _build_payload_perl
-
-Returns the requests payload as perl data structure, i.e. parsed by
-decode_json().
-
-=cut
-
-sub _build_payload_perl {
-    my $self = shift;
-
-    return decode_json($self->payload_json);
 }
 
 =head2 send_header
