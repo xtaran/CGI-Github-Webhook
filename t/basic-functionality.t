@@ -22,6 +22,11 @@ is(system("perl -I$dir/../lib $dir/cgi/basic.pl 'echo foo' $secret $tmplog 'POST
           "> $tmpout 2>&1"),
    0, 'system exited with zero');
 
+isnt(system("perl -I$dir/../lib $dir/cgi/basic.pl false $secret $tmplog 'POSTDATA=$json'".
+            "> $tmpout 2>&1"),
+     0, 'system calling false as trigger exited with non-zero');
+
+# TODO
 system('head', $tmplog, $tmpout);
 
 done_testing();
