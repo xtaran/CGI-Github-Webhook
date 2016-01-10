@@ -31,6 +31,9 @@ my $ghwh = CGI::Github::Webhook->new(
     log => $tmplog,
     );
 
+is($ghwh->header(),
+   "Content-Type: text/plain; charset=utf-8\r\n\r\n",
+   'header method returns expected Content-Type header');
 ok($ghwh->authenticated, 'Authentication successful');
 ok($ghwh->authenticated,
    'Authentication still considered successful on a second retrieval');

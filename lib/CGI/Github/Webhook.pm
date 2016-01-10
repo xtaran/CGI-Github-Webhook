@@ -184,6 +184,24 @@ has authenticated => (
 
 =head1 SUBROUTINES/METHODS
 
+=head2 header
+
+Passes arguments to and return value from $self->cgi->header(), i.e. a
+shortcut for $self->cgi->header().
+
+If no parameters are passed, $self->mime_type is passed.
+
+=cut
+
+sub header {
+    my $self = shift;
+    if (@_) {
+        return $self->cgi->header(@_);
+    } else {
+        return $self->cgi->header($self->mime_type);
+    }
+}
+
 =head2 run
 
 Start the authentication verification and run the trigger if the
@@ -248,7 +266,7 @@ sub verify_authentication {
     my $q       = $self->cgi;
     my $secret  = $self->secret;
 
-    print $q->header($self->mime_type);
+    print $self->header();
 
     open(my $logfh, '>>', $logfile);
     say $logfh "Date: ".localtime;
