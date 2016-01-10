@@ -177,10 +177,31 @@ verified and false else. Read-only attribute.
 =cut
 
 has authenticated => (
-    is => 'ro',
-    builder => 'verify_authentication',
-    lazy => 1,
+    is => 'lazy',
     );
+
+sub _build_authenticated {
+    my $self = shift;
+
+    my $logfile = $self->log;
+    my $q       = $self->cgi;
+    my $secret  = $self->secret;
+
+    open(my $logfh, '>>', $logfile);
+    say $logfh "Date: ".localtime;
+    say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
+
+    my $x_hub_signature =
+        $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
+    my $calculated_signature = 'sha1='.
+        hmac_sha1_hex($self->payload, $secret);
+
+    print $logfh Dumper($self->payload_perl,
+                        $x_hub_signature, $calculated_signature);
+    close $logfh;
+
+    return $x_hub_signature eq $calculated_signature;
+}
 
 =head4 payload
 
@@ -332,36 +353,6 @@ sub run {
         close $logfh;
         return; # undef or empty list, i.e. false
     }
-}
-
-=head2 verify_authentication
-
-Start the authentication verification return true if it could be
-verified and false else.
-
-=cut
-
-sub verify_authentication {
-    my $self = shift;
-
-    my $logfile = $self->log;
-    my $q       = $self->cgi;
-    my $secret  = $self->secret;
-
-    open(my $logfh, '>>', $logfile);
-    say $logfh "Date: ".localtime;
-    say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
-
-    my $x_hub_signature =
-        $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
-    my $calculated_signature = 'sha1='.
-        hmac_sha1_hex($self->payload, $secret);
-
-    print $logfh Dumper($self->payload_perl,
-                        $x_hub_signature, $calculated_signature);
-    close $logfh;
-
-    return $x_hub_signature eq $calculated_signature;
 }
 
 =head1 AUTHOR
