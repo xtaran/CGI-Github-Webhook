@@ -228,6 +228,8 @@ authentication error.
 sub run {
     my $self = shift;
 
+    $self->send_header();
+
     my $logfile = $self->log;
     open(my $logfh, '>>', $logfile);
 
@@ -277,8 +279,6 @@ sub verify_authentication {
     my $logfile = $self->log;
     my $q       = $self->cgi;
     my $secret  = $self->secret;
-
-    $self->send_header();
 
     open(my $logfh, '>>', $logfile);
     say $logfh "Date: ".localtime;
