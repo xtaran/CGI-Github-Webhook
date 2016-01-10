@@ -16,12 +16,7 @@ my $json = '{"fnord":"gnarz"}';
 my $signature = 'sha1='.hmac_sha1_hex($json, $secret);
 my $dir = dirname($0);
 
-%ENV = (%ENV,
-#        GATEWAY_INTERFACE    => 'CGI/1.1',
-#        REMOTE_ADDR          => '192.0.2.1',
-        HTTP_X_HUB_SIGNATURE => $signature,
-#        CONTENT_TYPE         => 'application/json',
-    );
+$ENV{HTTP_X_HUB_SIGNATURE} = $signature;
 
 is(system("perl -I$dir/../lib $dir/cgi/basic.pl 'echo foo' $secret $tmplog 'POSTDATA=$json'".
           "> $tmpout 2>&1"),
