@@ -194,11 +194,13 @@ sub run {
     say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
 
     my $payload = '';
-    try {
-        $payload = decode_json($q->param('POSTDATA'));
-    } catch {
-        $payload = $_;
-    };
+    if ($q->param('POSTDATA')) {
+        try {
+            $payload = decode_json($q->param('POSTDATA'));
+        } catch {
+            $payload = $_;
+        };
+    }
     $payload ||= '<no payload>';
 
     my $x_hub_signature =
@@ -209,13 +211,11 @@ sub run {
     print $logfh Dumper($payload, $x_hub_signature, $calculated_signature);
 
     if ($x_hub_signature eq $calculated_signature) {
-        say $self->text_on_success;
-        say $logfh $self->text_on_success;
-        close $logfh;
-
-        my $rc = system($self->trigger.' >> '.$logfile.' 2>&1 '.
-                        ($self->trigger_backgrounded ? '&' : ''));
-        if ($rc == 0) {
+        my $trigger = $self->trigger.' >> '.$logfile.' 2>&1 '.
+            ($self->trigger_backgrounded ? '&' : '');
+        my $rc = system($trigger);
+        if ($rc != 0) {
+            say $trigger;
             say $self->text_on_trigger_fail;
             say $logfh $self->text_on_trigger_fail;
             if ($? == -1) {
@@ -226,8 +226,13 @@ sub run {
             } else {
                 printf $logfh "child exited with value %d\n", $? >> 8;
             }
+            close $logfh;
             return 0;
         } else {
+            say $self->text_on_success;
+            say $logfh $self->text_on_success;
+
+            close $logfh;
             return 1;
         }
     } else {
