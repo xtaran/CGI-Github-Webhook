@@ -19,7 +19,7 @@ my $dir = dirname($0);
 
 $ENV{HTTP_X_HUB_SIGNATURE} = $signature;
 
-is(system("perl -I$dir/../lib $dir/cgi/basic.pl 'echo foo' $secret $tmplog 'POSTDATA=$json'".
+is(system("$^X -I$dir/../lib $dir/cgi/basic.pl 'echo foo' $secret $tmplog 'POSTDATA=$json'".
           "> $tmpout 2>&1"),
    0, 'system exited with zero');
 is(read_text($tmpout),
@@ -41,7 +41,7 @@ Successfully triggered
 # Reset the log file
 ($fh1, $tmplog) = tempfile();
 
-isnt(system("perl -I$dir/../lib $dir/cgi/basic.pl false $secret $tmplog 'POSTDATA=$json'".
+isnt(system("$^X -I$dir/../lib $dir/cgi/basic.pl false $secret $tmplog 'POSTDATA=$json'".
             "> $tmpout 2>&1"),
      0, 'system calling false as trigger exited with non-zero');
 is(read_text($tmpout),

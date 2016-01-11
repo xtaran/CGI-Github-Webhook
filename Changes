@@ -1,4 +1,8 @@
 Revision history for CGI-Github-Webhook
 
+0.02    UNRELEASED
+        Fix test suite when being run with a perl interpeter not in
+        $PATH. Thanks Slaven Rezić (SREZIC)!
+
 0.01    2015-01-11 02:43:36+0100
         First published version, released to an unsuspecting Github.
