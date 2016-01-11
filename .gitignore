@@ -2,3 +2,5 @@
 /cover_db
 /.build
 /debian/*debhelper*
+/CGI-Github-Webhook-*/
+/CGI-Github-Webhook-*.tar.gz
