@@ -4,6 +4,9 @@ Revision history for CGI-Github-Webhook
         Skip t/basic-functionality.t under dos-ish operating systems
         as it contains Bourne shell code.
 
+        Add Shields.io based passed/failed/errored badges and hooks to
+        put the according one into a deployment directory.
+
 0.02    2015-01-11 10:13:35+0100
         Fix test suite when being run with a perl interpeter not in
         $PATH. Thanks Slaven Rezić (SREZIC)!

@@ -5,13 +5,14 @@ use warnings;
 use 5.010;
 
 use Test::More;
-use File::Temp qw(tempfile);
+use File::Temp qw(tempfile tempdir);
 use Digest::SHA qw(hmac_sha1_hex);
 use File::Basename;
 use File::Slurper qw(read_text);
 
 my ($fh1, $tmplog) = tempfile();
 my ($fh2, $tmpout) = tempfile();
+my $tmpdir = tempdir( CLEANUP => 1 );
 my $secret = 'bar';
 my $json = '{"fnord":"gnarz"}';
 my $signature = 'sha1='.hmac_sha1_hex($json, $secret);
@@ -29,6 +30,7 @@ my $ghwh = CGI::Github::Webhook->new(
     trigger_backgrounded => 0,
     secret => $secret,
     log => $tmplog,
+    badge_to => "$tmpdir/badge.svg",
     );
 
 is($ghwh->header(),

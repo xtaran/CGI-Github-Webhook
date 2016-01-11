@@ -14,6 +14,8 @@ use Data::Dumper;
 use JSON;
 use Try::Tiny;
 use Digest::SHA qw(hmac_sha1_hex);
+use File::ShareDir qw(module_dir);
+use File::Copy;
 
 =head1 SYNOPSIS
 
@@ -48,6 +50,48 @@ GitHub webhooks.
 Constructor. Takes a configuration hash (or array) as parameters.
 
 =head3 List of parameters for new() constructor.
+
+They can be used as (Moo-style) accessors on the CGI::Github::Webhook
+object, too.
+
+=head4 badges_from
+
+Path where to look for badge files. Defaults to File::ShareDir's
+module_dir.
+
+=cut
+
+has badges_from => (
+    is => 'rw',
+    default => sub { module_dir(__PACKAGE__); },
+    isa => sub {
+        die "$_[0] needs to be an existing directory"
+            unless -d $_[0];
+    },
+    lazy => 1,
+    );
+
+=head4 badge_to
+
+Local path to file to which L<https://shields.io/> style badges should
+be written. Defaults to undef which means the feature is disabled.
+
+Needs to have a suffix. That suffix will then be used to look for a
+file in the right format.
+
+Currently only ".svg" and ".png" suffixes/formats are supported if no
+custom badge set is used.
+
+=cut
+
+has badge_to => (
+    is => 'rw',
+    default => sub { return },
+    isa => sub {
+        die "$_[0] needs have a file suffix"
+            if (defined($_[0]) and $_[0] !~ /\./);
+    },
+    );
 
 =head4 cgi
 
@@ -273,6 +317,37 @@ sub _build_payload_perl {
 
 =head1 SUBROUTINES/METHODS
 
+=head2 deploy_badge
+
+Copies file given as parameter to path given via badge_to
+attribute. The parameter needs to be given without file suffix. The
+file suffix from the badges attribute will be appended.
+
+Doesn't do anything if badge_to is not set.
+
+=cut
+
+sub deploy_badge {
+    my $self = shift;
+    return unless $self->badge_to;
+
+    my $basename = shift;
+
+    my $suffix = $self->badge_to;
+    $suffix =~ s/^.*(\.[^.]*?)$/$1/;
+    my $badge = $self->badges_from.'/'.$basename.$suffix;
+
+    my $logfile = $self->log;
+    open(my $logfh, '>>', $logfile);
+
+    my $file_copied = copy($badge, $self->badge_to);
+    if ($file_copied) {
+        say $logfh "$badge successfully copied to ".$self->badge_to;
+    } else {
+        say $logfh "Couldn't copy $badge  to ".$self->badge_to.": $!";
+    }
+}
+
 =head2 header
 
 Passes arguments to and return value from $self->cgi->header(), i.e. a
@@ -332,15 +407,19 @@ sub run {
             say $logfh $self->text_on_trigger_fail;
             if ($? == -1) {
                 say $logfh "Trigger failed to execute: $!";
+                $self->deploy_badge('errored');
             } elsif ($? & 127) {
                 printf $logfh "child died with signal %d, %s coredump\n",
                 ($? & 127),  ($? & 128) ? 'with' : 'without';
+                $self->deploy_badge('errored');
             } else {
                 printf $logfh "child exited with value %d\n", $? >> 8;
+                $self->deploy_badge('failed');
             }
             close $logfh;
             return 0;
         } else {
+            $self->deploy_badge('success');
             say $self->text_on_success;
             say $logfh $self->text_on_success;
 

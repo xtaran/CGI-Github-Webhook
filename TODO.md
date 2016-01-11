@@ -6,5 +6,7 @@ TODO for CGI::Github::Webhook
   rather bad coverage.
   * Package CGI::Test for Debian
 * Provide access methods to commonly used data inside the `POST`ed JSON.
-* Adding support for "build passed/failed/errored" hooks to create e.g.
-  buttons based on images made via [Shields.io](http://shields.io/).
+* If the trigger script is backgrounded, there's not much more control
+  over what happens afterwards. It would be nice if there was some
+  hook to run after the trigger script has been run and which would
+  check the trigger script's exit code to e.g. change the state badge.
