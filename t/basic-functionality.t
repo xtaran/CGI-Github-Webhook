@@ -10,6 +10,12 @@ use Digest::SHA qw(hmac_sha1_hex);
 use File::Basename;
 use File::Slurper qw(read_text);
 
+if ($^O eq 'dos' or $^O eq 'os2' or $^O eq 'MSWin32' ) {
+    plan skip_all => 'these tests do not work on dos-ish systems';
+} else {
+    plan tests => 6;
+}
+
 my ($fh1, $tmplog) = tempfile();
 my ($fh2, $tmpout) = tempfile();
 my $secret = 'bar';
@@ -60,5 +66,3 @@ false >> $tmplog 2>&1
 Trigger failed
 child exited with value 1
 ", "CGI log file as expected");
-
-done_testing();

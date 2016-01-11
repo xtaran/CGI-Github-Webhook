@@ -1,5 +1,9 @@
 Revision history for CGI-Github-Webhook
 
+0.03    {{NEXT}}
+        Skip t/basic-functionality.t under dos-ish operating systems
+        as it contains Bourne shell code.
+
 0.02    2015-01-11 10:13:35+0100
         Fix test suite when being run with a perl interpeter not in
         $PATH. Thanks Slaven Rezić (SREZIC)!
