@@ -10,3 +10,5 @@ TODO for CGI::Github::Webhook
   over what happens afterwards. It would be nice if there was some
   hook to run after the trigger script has been run and which would
   check the trigger script's exit code to e.g. change the state badge.
+* Provide some kind of locking to only run one instance of the trigger
+  script or at least its final syncing.
