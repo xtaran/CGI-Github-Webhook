@@ -7,6 +7,8 @@ Revision history for CGI-Github-Webhook
         Add Shields.io based passed/failed/errored badges and hooks to
         put the according one into a deployment directory.
 
+        Also verify a failed authentication case in t/methods.t.
+
 0.02    2015-01-11 10:13:35+0100
         Fix test suite when being run with a perl interpeter not in
         $PATH. Thanks Slaven Rezić (SREZIC)!

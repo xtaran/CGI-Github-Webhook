@@ -33,6 +33,7 @@ $ENV{REQUEST_METHOD} = 'GET';
 
 use_ok('CGI::Github::Webhook');
 
+# Successful authentication
 my $ghwh = CGI::Github::Webhook->new(
     trigger => 'echo foo',
     trigger_backgrounded => 0,
@@ -56,5 +57,30 @@ ok($ghwh->deploy_badge("success"),
 file_exists_ok($badge);
 file_readable_ok($badge);
 file_contains_like($badge, qr/<svg.*success/s, "'success' and is an SVG file");
+
+# Failed authentication
+$ghwh = CGI::Github::Webhook->new(
+    trigger => 'echo foo',
+    trigger_backgrounded => 0,
+    secret => 'the wrong one',
+    log => $tmplog,
+    badge_to => $badge,
+    );
+
+is($ghwh->header(),
+   "Content-Type: text/plain; charset=utf-8\r\n\r\n",
+   'header method returns expected Content-Type header');
+is($ghwh->payload, $json, 'Raw payload returned as expected');
+is($ghwh->payload_json, $json, 'JSON payload returned as expected');
+is_deeply($ghwh->payload_perl, { fnord => 'gnarz' },
+          'Perl data structure payload returned as expected');
+ok(!$ghwh->authenticated, 'Authentication failed');
+ok(!$ghwh->authenticated,
+   'Authentication still considered failing on a second retrieval');
+ok($ghwh->deploy_badge("failed"),
+   'Badge could be deployed successfully');
+file_exists_ok($badge);
+file_readable_ok($badge);
+file_contains_like($badge, qr/<svg.*failed/s, "'failed' and is an SVG file");
 
 done_testing();
