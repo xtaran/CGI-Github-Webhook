@@ -11,6 +11,10 @@ Perl.
 In most cases three statements already suffice. Configure a script to
 trigger, a shared secret and a log file and you're ready to go.
 
+It also supports updating [Shields.io](https://shields.io/)-like
+status badges depending on the trigger script's return code (or fork
+success/fail).
+
 Synopsis
 --------
 
@@ -25,6 +29,7 @@ my $ghwh = CGI::Github::Webhook->new(
     trigger_backgrounded => 1,
     secret => 'use a generated password here, nothing valuable',
     log => '/srv/some-github-project/log/deployment.log',
+    badge_to => '/srv/some-github-project/htdocs/status.svg',
 );
 $ghwh->run();
 ```
@@ -56,3 +61,7 @@ or (at your option)
 [Artistic License](http://dev.perl.org/licenses/artistic.html).
 
 See http://dev.perl.org/licenses/ for more information.
+
+The badges in the `static-badges` directory are licensed under the
+[CC0 Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/)
+and not copyrighted.
