@@ -52,8 +52,7 @@ Successfully triggered
 
 file_exists_ok($badge);
 file_readable_ok($badge);
-file_contains_like($badge, qr/<svg.*success/s,
-                   "'success' and is an SVG file");
+file_contains_like($badge, qr/<svg.*success/s, "'success' and is an SVG file");
 
 # Reset the log file
 ($fh1, $tmplog) = tempfile();
@@ -84,5 +83,4 @@ child exited with value 1
 
 file_exists_ok($badge);
 file_readable_ok($badge);
-file_contains_like("$tmpdir/badge.svg", qr/<svg.*failed/s,
-                   "'failed' and is an SVG file");
+file_contains_like($badge, qr/<svg.*failed/s, "'failed' and is an SVG file");

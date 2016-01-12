@@ -9,6 +9,13 @@ use File::Temp qw(tempfile tempdir);
 use Digest::SHA qw(hmac_sha1_hex);
 use File::Basename;
 use File::Slurper qw(read_text);
+use Test::File;
+use Test::File::ShareDir
+    -share => {
+        -module => {
+            'CGI::Github::Webhook' => dirname($0).'/../static-badges/',
+        },
+};
 
 my ($fh1, $tmplog) = tempfile();
 my ($fh2, $tmpout) = tempfile();
@@ -17,6 +24,7 @@ my $secret = 'bar';
 my $json = '{"fnord":"gnarz"}';
 my $signature = 'sha1='.hmac_sha1_hex($json, $secret);
 my $dir = dirname($0);
+my $badge = "$tmpdir/badge.svg";
 
 $ENV{HTTP_X_HUB_SIGNATURE} = $signature;
 $ENV{QUERY_STRING} = "POSTDATA=$json";
@@ -30,7 +38,7 @@ my $ghwh = CGI::Github::Webhook->new(
     trigger_backgrounded => 0,
     secret => $secret,
     log => $tmplog,
-    badge_to => "$tmpdir/badge.svg",
+    badge_to => $badge,
     );
 
 is($ghwh->header(),
@@ -43,5 +51,10 @@ is_deeply($ghwh->payload_perl, { fnord => 'gnarz' },
 ok($ghwh->authenticated, 'Authentication successful');
 ok($ghwh->authenticated,
    'Authentication still considered successful on a second retrieval');
+ok($ghwh->deploy_badge("success"),
+   'Badge could be deployed successfully');
+file_exists_ok($badge);
+file_readable_ok($badge);
+file_contains_like($badge, qr/<svg.*success/s, "'success' and is an SVG file");
 
 done_testing();

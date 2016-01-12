@@ -332,6 +332,7 @@ sub deploy_badge {
     return unless $self->badge_to;
 
     my $basename = shift;
+    die "No basename provided" unless defined($basename);
 
     my $suffix = $self->badge_to;
     $suffix =~ s/^.*(\.[^.]*?)$/$1/;
@@ -343,8 +344,10 @@ sub deploy_badge {
     my $file_copied = copy($badge, $self->badge_to);
     if ($file_copied) {
         say $logfh "$badge successfully copied to ".$self->badge_to;
+        return 1;
     } else {
         say $logfh "Couldn't copy $badge  to ".$self->badge_to.": $!";
+        return;
     }
 }
 
