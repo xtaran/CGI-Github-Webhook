@@ -443,11 +443,12 @@ Axel Beckert, C<< <abe@deuxchevaux.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-cgi-github-webhook
-at rt.cpan.org>, or through the web interface at
+Please report any bugs, either via via GitHub Issues at
+L<https://github.com/xtaran/CGI-Github-Webhook/issues> or via the CPAN
+Request Tracker by sending an e-mail to
+C<bug-cgi-github-webhook@rt.cpan.org> or submitting a bug report
+through the CPAN Request Tracker web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=CGI-Github-Webhook>.
-I will be notified, and then you'll automatically be notified of
-progress on your bug as I make changes.
 
 =head1 SUPPORT
 
