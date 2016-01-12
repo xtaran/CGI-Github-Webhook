@@ -1,6 +1,6 @@
 Revision history for CGI-Github-Webhook
 
-0.03    {{NEXT}}
+0.03    2016-01-13 00:43:48+0100
         Skip t/basic-functionality.t under dos-ish operating systems
         as it contains Bourne shell code.
 
