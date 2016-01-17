@@ -15,3 +15,4 @@ TODO for CGI::Github::Webhook
 * Provide some kind of locking to only run one instance of the trigger
   script or at least its final syncing.
 * Use [Semantic Versioning](https://semver.org/) aka `breaking.feature.fix`.
+* Make `secret` optional. That way, the webhook will also work with GitLab.
