@@ -12,3 +12,4 @@ TODO for CGI::Github::Webhook
   check the trigger script's exit code to e.g. change the state badge.
 * Provide some kind of locking to only run one instance of the trigger
   script or at least its final syncing.
+* Use [Semantic Versioning](https://semver.org/) aka `breaking.feature.fix`.
