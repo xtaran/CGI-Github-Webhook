@@ -1,12 +1,6 @@
 TODO for CGI::Github::Webhook
 =============================
 
-* use [CGI::Test](https://metacpan.org/pod/CGI::Test) in test suite
-  instead of incomplete self-written wrapper. This should also fix the
-  rather bad coverage. A prove of concept can be found in
-  [the `cgi-test` branch](https://github.com/xtaran/CGI-Github-Webhook/tree/cgi-test),
-  but
-  [fails the testing at Travis-CI](https://travis-ci.org/xtaran/CGI-Github-Webhook/branches).
 * Provide access methods to commonly used data inside the `POST`ed JSON.
 * Adding support for "build passed/failed/errored" hooks to create e.g.
   buttons based on images made via [Shields.io](http://shields.io/).

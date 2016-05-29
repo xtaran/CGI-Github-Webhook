@@ -1,6 +1,7 @@
 Revision history for CGI-Github-Webhook
 
 0.04    {{NEXT}}
+        Use CGI::Test for the test suite.
 
 0.03    2016-01-13 00:43:48+0100
         Skip t/basic-functionality.t under dos-ish operating systems
