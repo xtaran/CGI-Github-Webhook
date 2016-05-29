@@ -3,6 +3,8 @@ CGI::Github::Webhook
 
 [![Build Status](https://travis-ci.org/xtaran/CGI-Github-Webhook.svg?branch=master)](https://travis-ci.org/xtaran/CGI-Github-Webhook)
 [![Coverage Status](https://coveralls.io/repos/xtaran/CGI-Github-Webhook/badge.svg?branch=master&service=github)](https://coveralls.io/github/xtaran/CGI-Github-Webhook?branch=master)
+[![Kwalitee status](http://cpants.cpanauthors.org/dist/CGI-Github-Webhook.png)](http://cpants.charsbar.org/dist/overview/CGI-Github-Webhook)
+[![CPAN version](https://img.shields.io/cpan/v/CGI-Github-Webhook.svg)](https://metacpan.org/release/CGI-Github-Webhook)
 
 An easy to use module for writing CGI-based
 [Github webhook](https://developer.github.com/webhooks/) backends in
@@ -10,6 +12,10 @@ Perl.
 
 In most cases three statements already suffice. Configure a script to
 trigger, a shared secret and a log file and you're ready to go.
+
+It also supports updating [Shields.io](https://shields.io/)-like
+status badges depending on the trigger script's return code (or fork
+success/fail).
 
 Synopsis
 --------
@@ -25,6 +31,7 @@ my $ghwh = CGI::Github::Webhook->new(
     trigger_backgrounded => 1,
     secret => 'use a generated password here, nothing valuable',
     log => '/srv/some-github-project/log/deployment.log',
+    badge_to => '/srv/some-github-project/htdocs/status.svg',
 );
 $ghwh->run();
 ```
@@ -56,3 +63,7 @@ or (at your option)
 [Artistic License](http://dev.perl.org/licenses/artistic.html).
 
 See http://dev.perl.org/licenses/ for more information.
+
+The badges in the `static-badges` directory are licensed under the
+[CC0 Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/)
+and not copyrighted.

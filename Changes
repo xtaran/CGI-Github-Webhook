@@ -1,5 +1,19 @@
 Revision history for CGI-Github-Webhook
 
-0.01    2015-01-09 19:06:15+0100
-        First published version, released on an unsuspecting Github world.
+0.04    {{NEXT}}
 
+0.03    2016-01-13 00:43:48+0100
+        Skip t/basic-functionality.t under dos-ish operating systems
+        as it contains Bourne shell code.
+
+        Add Shields.io based passed/failed/errored badges and hooks to
+        put the according one into a deployment directory.
+
+        Also verify a failed authentication case in t/methods.t.
+
+0.02    2015-01-11 10:13:35+0100
+        Fix test suite when being run with a perl interpeter not in
+        $PATH. Thanks Slaven Rezić (SREZIC)!
+
+0.01    2015-01-11 02:43:36+0100
+        First published version, released to an unsuspecting Github.

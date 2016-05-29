@@ -15,6 +15,8 @@ Build-Depends-Indep: libcgi-pm-perl,
                      libfile-slurper-perl,
                      libjson-perl,
                      libmoo-perl,
+                     libtest-file-perl,
+                     libtest-file-sharedir-perl,
                      libtry-tiny-perl,
                      perl
 Standards-Version: 3.9.6
@@ -26,6 +28,7 @@ Testsuite: autopkgtest-pkg-perl
 Package: libcgi-github-webhook-perl
 Architecture: all
 Depends: libcgi-pm-perl,
+         libfile-sharedir-perl,
          libjson-perl,
          libmoo-perl,
          libtry-tiny-perl,
