@@ -37,5 +37,5 @@ Depends: libcgi-pm-perl,
 Description: Easily write CGI-based GitHub webhooks in Perl
  CGI::Github::Webhook provides an easy way to write CGI-based GitHub
  webhooks in Perl. In most cases three statements already
- suffice. Configure a script to trigger, a shared secret and a log
+ suffice: Configure a script to trigger, a shared secret and a log
  file and you're ready to go.
