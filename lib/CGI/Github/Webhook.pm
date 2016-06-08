@@ -116,7 +116,7 @@ objects doesn't work (yet).
 
 has log => (
     is => 'ro',
-    default => '/dev/stderr',
+    default => sub { '/dev/stderr' },
     isa => sub { die "$_[0] doesn't exist!" unless -e $_[0]; },
     );
 
@@ -129,7 +129,7 @@ charset=utf-8' for now.
 
 has mime_type => (
     is => 'ro',
-    default => 'text/plain; charset=utf-8',
+    default => sub { 'text/plain; charset=utf-8' },
     );
 
 =head4 secret
@@ -157,7 +157,7 @@ triggered".
 
 has text_on_success => (
     is => 'rw',
-    default => 'Successfully triggered',
+    default => sub { 'Successfully triggered' },
     );
 
 =head4 text_on_auth_fail
@@ -169,7 +169,7 @@ failed. Defaults to "Authentication failed".
 
 has text_on_auth_fail => (
     is => 'rw',
-    default => 'Authentication failed',
+    default => sub { 'Authentication failed' },
     );
 
 =head4 text_on_trigger_fail
@@ -181,7 +181,7 @@ failed. Defaults to "Trigger failed".
 
 has text_on_trigger_fail => (
     is => 'rw',
-    default => 'Trigger failed',
+    default => sub { 'Trigger failed' },
     );
 
 
