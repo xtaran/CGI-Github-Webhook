@@ -20,9 +20,9 @@ Build-Depends-Indep: libcgi-pm-perl,
                      libtry-tiny-perl,
                      perl
 Standards-Version: 3.9.8
-Vcs-Browser: https://github.com/xtaran/run-parts
-Vcs-Git: https://github.com/xtaran/run-parts.git
-Homepage: https://metacpan.org/release/Run-Parts
+Vcs-Browser: https://github.com/xtaran/CGI-Github-Webhook
+Vcs-Git: https://github.com/xtaran/CGI-Github-Webhook.git
+Homepage: https://metacpan.org/release/CGI-Github-Webhook
 Testsuite: autopkgtest-pkg-perl
 
 Package: libcgi-github-webhook-perl
