@@ -293,6 +293,7 @@ sub _build_payload_json {
         try {
             decode_json($payload);
         } catch {
+            s/\"/\'/g; s/\n/ /gs;
             $payload = qq({"error":"$_"});
         };
     }

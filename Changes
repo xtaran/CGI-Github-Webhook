@@ -12,6 +12,9 @@ Revision history for CGI-Github-Webhook
         Fix "Use of uninitialized value in subroutine entry" when no
         payload is passed.
 
+        Sanitize JSON decoding error message so it can be used inside
+        an JSON string.
+
         Add more tests.
 
 0.03    2016-01-13 00:43:48+0100
