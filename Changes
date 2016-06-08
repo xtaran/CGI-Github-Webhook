@@ -9,6 +9,9 @@ Revision history for CGI-Github-Webhook
         Fix isa test for log: The log doesn't need to exist in
         advance, but the directory it will be in needs to exist.
 
+        Fix "Use of uninitialized value in subroutine entry" when no
+        payload is passed.
+
 0.03    2016-01-13 00:43:48+0100
         Skip t/basic-functionality.t under dos-ish operating systems
         as it contains Bourne shell code.

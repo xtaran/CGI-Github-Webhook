@@ -242,7 +242,7 @@ sub _build_authenticated {
     my $x_hub_signature =
         $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
     my $calculated_signature = 'sha1='.
-        hmac_sha1_hex($self->payload, $secret);
+        hmac_sha1_hex($self->payload // '', $secret);
 
     print $logfh Dumper($self->payload_perl,
                         $x_hub_signature, $calculated_signature);
