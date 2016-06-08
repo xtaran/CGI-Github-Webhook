@@ -16,6 +16,7 @@ use Try::Tiny;
 use Digest::SHA qw(hmac_sha1_hex);
 use File::ShareDir qw(module_dir);
 use File::Copy;
+use File::Basename;
 
 =head1 SYNOPSIS
 
@@ -117,7 +118,10 @@ objects doesn't work (yet).
 has log => (
     is => 'ro',
     default => sub { '/dev/stderr' },
-    isa => sub { die "$_[0] doesn't exist!" unless -e $_[0]; },
+    isa => sub {
+        my $dir = dirname($_[0]);
+        die "$dir doesn't exist!" unless -d $dir;
+    },
     );
 
 =head4 mime_type

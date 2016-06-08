@@ -6,6 +6,9 @@ Revision history for CGI-Github-Webhook
         Always use "sub { … }" around default values. (Needed to
         support Moo ≤ 1.000008.)
 
+        Fix isa test for log: The log doesn't need to exist in
+        advance, but the directory it will be in needs to exist.
+
 0.03    2016-01-13 00:43:48+0100
         Skip t/basic-functionality.t under dos-ish operating systems
         as it contains Bourne shell code.
