@@ -23,7 +23,7 @@ my $ghwh = CGI::Github::Webhook->new(
     secret => $ARGV[1],
     log => $ARGV[2],
     cgi => $cgi,
-    badge_to => $ARGV[3]."/badge.svg",
+    ($ARGV[3] ? (badge_to => $ARGV[3]."/badge.svg") : ()),
     );
 my $rc = $ghwh->run();
 

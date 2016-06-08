@@ -26,12 +26,26 @@ my $signature = 'sha1='.hmac_sha1_hex($json, $secret);
 my $dir = dirname($0);
 my $badge = "$tmpdir/badge.svg";
 
-$ENV{HTTP_X_HUB_SIGNATURE} = $signature;
-$ENV{QUERY_STRING} = "POSTDATA=$json";
 $ENV{GATEWAY_INTERFACE} = 'CGI/1.1';
 $ENV{REQUEST_METHOD} = 'GET';
 
 use_ok('CGI::Github::Webhook');
+
+# No X-Hub-Signature, no payload
+my $ghwh = CGI::Github::Webhook->new(
+    trigger => 'echo foo',
+    trigger_backgrounded => 0,
+    secret => 'any',
+    log => $tmplog,
+    );
+
+is($ghwh->header(),
+   "Content-Type: text/plain; charset=utf-8\r\n\r\n",
+   'header method returns expected Content-Type header');
+ok(!$ghwh->authenticated, 'Authentication failed');
+
+$ENV{HTTP_X_HUB_SIGNATURE} = $signature;
+$ENV{QUERY_STRING} = "POSTDATA=$json";
 
 # Successful authentication
 my $ghwh = CGI::Github::Webhook->new(
