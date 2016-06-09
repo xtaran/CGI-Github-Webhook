@@ -48,7 +48,7 @@ $ENV{HTTP_X_HUB_SIGNATURE} = $signature;
 $ENV{QUERY_STRING} = "POSTDATA=$json";
 
 # Successful authentication
-my $ghwh = CGI::Github::Webhook->new(
+$ghwh = CGI::Github::Webhook->new(
     trigger => 'echo foo',
     trigger_backgrounded => 0,
     secret => $secret,
