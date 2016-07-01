@@ -4,9 +4,6 @@ use strict;
 use warnings;
 use 5.010;
 
-#use CGI;
-#my $cgi = CGI->new();
-
 use CGI::Github::Webhook;
 
 my $ghwh = CGI::Github::Webhook->new(
