@@ -1,5 +1,5 @@
-libcgi-github-webhook-perl (0.04-1) UNRELEASED; urgency=low
+libcgi-github-webhook-perl (0.05-1) UNRELEASED; urgency=low
 
   * Initial Release. (Closes: #TODO)
 
- -- Axel Beckert <abe@debian.org>  Thu, 09 Jun 2016 02:12:53 +0200
+ -- Axel Beckert <abe@debian.org>  Fri, 01 Jul 2016 22:12:23 +0200
