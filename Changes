@@ -1,5 +1,11 @@
 Revision history for CGI-Github-Webhook
 
+0.05    UNRELEASED
+
+        Add ugly hack to dummy CGI script to be executed with the
+        correct perl binary. Hopefully fixes #1 and most test failures
+        with CPAN testers.
+
 0.04    2016-06-09 02:12:57+0200
         Use CGI::Test for the test suite.
 
