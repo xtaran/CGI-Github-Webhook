@@ -1,5 +1,9 @@
 Revision history for CGI-Github-Webhook
 
+0.06    UNRELEAESED
+        Enforce autoflush inside CGI::Github::Webhook::run() to avoid
+        race condition. Fixes #2. Thanks to Slaven Rezić for testing!
+
 0.05    2016-07-01 22:12:23+0200
         Add ugly hack to dummy CGI script to be executed with the
         correct perl binary. Hopefully fixes #1 and most test failures

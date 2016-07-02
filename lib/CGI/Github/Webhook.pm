@@ -398,6 +398,7 @@ authentication error.
 =cut
 
 sub run {
+    local $| = 1;
     my $self = shift;
 
     $self->send_header();
