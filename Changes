@@ -1,6 +1,6 @@
 Revision history for CGI-Github-Webhook
 
-0.06    UNRELEAESED
+0.06    2016-07-21 17:32:23+0200
         Enforce autoflush inside CGI::Github::Webhook::run() to avoid
         race condition. Fixes #2. Thanks to Slaven Rezić for testing!
 
