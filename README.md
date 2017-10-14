@@ -6,6 +6,8 @@ CGI::Github::Webhook
 [![Kwalitee status](http://cpants.cpanauthors.org/dist/CGI-Github-Webhook.png)](http://cpants.charsbar.org/dist/overview/CGI-Github-Webhook)
 [![CPAN version](https://img.shields.io/cpan/v/CGI-Github-Webhook.svg)](https://metacpan.org/release/CGI-Github-Webhook)
 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/perl:cgi-github-webhook.svg)](https://repology.org/metapackage/perl:cgi-github-webhook)
+
 An easy to use module for writing CGI-based
 [Github webhook](https://developer.github.com/webhooks/) backends in
 Perl.
