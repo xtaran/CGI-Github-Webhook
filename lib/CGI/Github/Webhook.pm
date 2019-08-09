@@ -215,6 +215,25 @@ has trigger_backgrounded => (
     default => 1,
 );
 
+=head4 auth_style
+
+Select the style of authentication to use.  Can be one of
+"github" or "gitlab" at present.  Defaults to "github".
+
+"github" indicates that the payload should have the shared secret
+appended to it, and the resulting sha1 hash should match what's
+repsented in the X-Hub-Signature: header.
+
+"gitlab" indicates that the shared secret should simply be compared to
+whatever is presented in the X-Gitlab-Token: header.
+
+=cut
+
+has auth_style => (
+    is => 'ro',
+    default => sub { 'github' },
+    );
+
 =head1 OTHER PROPERTIES
 
 =head4 authenticated
@@ -231,24 +250,37 @@ has authenticated => (
 sub _build_authenticated {
     my $self = shift;
 
-    my $logfile = $self->log;
-    my $q       = $self->cgi;
-    my $secret  = $self->secret;
+    my $logfile    = $self->log;
+    my $q          = $self->cgi;
+    my $secret     = $self->secret;
+    my $auth_style = $self->auth_style;
 
     open(my $logfh, '>>', $logfile);
     say $logfh "Date: ".localtime;
     say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
 
-    my $x_hub_signature =
-        $q->http('X-Hub-Signature') || $q->http('X-Gitlab-Token') || '<no-x-hub-signature>';
-    my $calculated_signature = 'sha1='.
-        hmac_sha1_hex($self->payload // '', $secret);
-
+    my $presented_credential;
+    my $local_credential;
+    if ("github" eq $auth_style) {
+        $presented_credential =
+            $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
+        $local_credential = 'sha1='.
+            hmac_sha1_hex($self->payload // '', $secret);
+    }
+    elsif ("gitlab" eq $auth_style) {
+        $presented_credential =
+            $q->http('X-Gitlab-Token') || '<no-x-gitlab-token>';
+        $local_credential = $secret;
+    }
+    else {
+        $presented_credential = '<unrecognised-auth-style>';
+        $local_credential = "auth_style=" . $auth_style ;
+    }
     print $logfh Dumper($self->payload_perl,
-                        $x_hub_signature, $calculated_signature);
+                        $presented_credential, $local_credential);
     close $logfh;
 
-    return $x_hub_signature eq $calculated_signature;
+    return $presented_credential eq $local_credential;
 }
 
 =head4 payload
