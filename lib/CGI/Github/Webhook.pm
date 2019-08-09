@@ -240,7 +240,7 @@ sub _build_authenticated {
     say $logfh "Remote IP: ".$q->remote_host()." (".$q->remote_addr().")";
 
     my $x_hub_signature =
-        $q->http('X-Hub-Signature') || '<no-x-hub-signature>';
+        $q->http('X-Hub-Signature') || $q->http('X-Gitlab-Token') || '<no-x-hub-signature>';
     my $calculated_signature = 'sha1='.
         hmac_sha1_hex($self->payload // '', $secret);
 
