@@ -3,8 +3,10 @@
 %:
 	dh $@ --with dist-zilla
 
-# Need as dh_strip_nondeterminism bails out if run as non-root
-# (c.f. Rules-Requires-Root) and files are mode 444.
+# Need as older dh_strip_nondeterminism bails out and newer
+# dh_strip_nondeterminism skip files if run as non-root
+# (c.f. Rules-Requires-Root) and files are mode 444. See also
+# https://bugs.debian.org/980356
 override_dh_strip_nondeterminism:
 	find debian/libcgi-github-webhook-perl -perm 444 | xargs chmod -c 644
 	dh_strip_nondeterminism
