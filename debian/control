@@ -19,7 +19,7 @@ Build-Depends-Indep: libcgi-pm-perl,
                      libtest-file-sharedir-perl,
                      libtry-tiny-perl,
                      perl
-Standards-Version: 3.9.8
+Standards-Version: 4.5.1
 Vcs-Browser: https://github.com/xtaran/CGI-Github-Webhook
 Vcs-Git: https://github.com/xtaran/CGI-Github-Webhook.git
 Homepage: https://metacpan.org/release/CGI-Github-Webhook
