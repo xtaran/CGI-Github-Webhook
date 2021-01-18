@@ -2,6 +2,8 @@ Revision history for CGI-Github-Webhook
 
 0.07	UNRELEASED
         Add repology package list badges to README.
+        Badge images optimized by ImgBot.
+        Minimal support for GitLab by Philip Hands.
 
 0.06    2016-07-21 17:32:23+0200
         Enforce autoflush inside CGI::Github::Webhook::run() to avoid
