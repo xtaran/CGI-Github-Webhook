@@ -7,6 +7,8 @@ libcgi-github-webhook-perl (0.07-1) UNRELEASED; urgency=medium
   * Bump debian/watch version from 3 to 4. Thanks Lintian!
   * Declare compliance with Debian Policy 4.5.1.
     + Change debian/copyright format URL to HTTPS.
+  * Set "Rules-Requires-Root: no".
+    + Change installed image files from mode 444 to 644.
 
  -- Axel Beckert <abe@debian.org>  Mon, 18 Jan 2021 04:41:49 +0100
 
