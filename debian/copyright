@@ -4,7 +4,7 @@ Upstream-Contact: Axel Beckert <abe@deuxchevaux.org>
 Upstream-Name: CGI-Github-Webhook
 
 Files: *
-Copyright: 2016, Axel Beckert <abe@deuxchevaux.org>
+Copyright: 2016-2021, Axel Beckert <abe@deuxchevaux.org>
 License: Artistic or GPL-1+
 
 Files: static-badges/*

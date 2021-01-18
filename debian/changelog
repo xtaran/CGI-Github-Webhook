@@ -1,6 +1,7 @@
 libcgi-github-webhook-perl (0.07-1) UNRELEASED; urgency=medium
 
   * New upstream release. (No functional changes)
+    + Bump copyright years in debian/copyright.
   * Bump debhelper compatibility level to 13.
     + Build-depend on "debhelper-compat (= 13)" to replace debian/compat.
   * Bump debian/watch version from 3 to 4. Thanks Lintian!
